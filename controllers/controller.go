@@ -196,20 +196,22 @@ func SearchProduct() gin.HandlerFunc {
 
 		err = cursor.All(ctx, &productsList)
 
+		// If there is a problem while fetching all the documents at once (e.g., a network failure or invalid data that cannot be unmarshalled into the productsList slice), the error will be caught here.
 		if err != nil {
 			log.Println(err)
 			ctx.AbortWithStatus(http.StatusInternalServerError)
+			return
 		}
 
 		defer cursor.Close(context)
+
+		// After attempting to read all documents, if there were any errors encountered during the cursor’s lifetime (not just during the All method call), they will be caught here.
 
 		if err := cursor.Err(); err != nil {
 			log.Println(err)
 			ctx.IndentedJSON(400, "Invalid")
 			return
 		}
-
-		defer cancel()
 
 		ctx.IndentedJSON(200, productsList)
 

@@ -133,9 +133,99 @@ func AddAddress() gin.HandlerFunc {
 
 func EditHomeAddress() gin.HandlerFunc {
 
+	return func(ctx *gin.Context) {
+
+		userIDFromQuery := ctx.Query("id")
+
+		if userIDFromQuery == "" {
+			log.Println("User ID is empty")
+			ctx.Header("Content-Type", "application/json")
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"ERROR": "UserID is empty."})
+			ctx.Abort()
+			return
+		}
+
+		userID, err := primitive.ObjectIDFromHex(userIDFromQuery)
+
+		if err != nil {
+			log.Println(err)
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
+			return
+		}
+
+		var newAddress models.Address
+
+		if err = ctx.BindJSON(&newAddress); err != nil {
+
+			ctx.JSON(http.StatusNotAcceptable, gin.H{"error": "Invalid JSON data"})
+			return
+
+		}
+
+		context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		filter := bson.D{primitive.E{Key: "_id", Value: userID}}
+		update := bson.D{{Key: "$set", Value: bson.D{primitive.E{Key: "address.0.house_name", Value: newAddress.House}, primitive.E{Key: "address.0.street_name", Value: newAddress.Street}, primitive.E{Key: "address.0.city_name", Value: newAddress.City}, primitive.E{Key: "address.0.pin_code", Value: newAddress.Pincode}}}}
+		_, err = UserCollection.UpdateOne(context, filter, update)
+
+		if err != nil {
+			ctx.IndentedJSON(http.StatusInternalServerError, "Something Went Wrong")
+			return
+		}
+
+		ctx.IndentedJSON(http.StatusOK, "Successfully updated home address")
+
+	}
+
 }
 
 func EditWorkAddress() gin.HandlerFunc {
+
+	return func(ctx *gin.Context) {
+
+		userIDFromQuery := ctx.Query("id")
+
+		if userIDFromQuery == "" {
+			log.Println("User ID is empty")
+			ctx.Header("Content-Type", "application/json")
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"ERROR": "UserID is empty."})
+			ctx.Abort()
+			return
+		}
+
+		userID, err := primitive.ObjectIDFromHex(userIDFromQuery)
+
+		if err != nil {
+			log.Println(err)
+			ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
+			return
+		}
+
+		var newAddress models.Address
+
+		if err = ctx.BindJSON(&newAddress); err != nil {
+
+			ctx.JSON(http.StatusNotAcceptable, gin.H{"error": "Invalid JSON data"})
+			return
+
+		}
+
+		context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+		defer cancel()
+
+		filter := bson.D{primitive.E{Key: "_id", Value: userID}}
+		update := bson.D{{Key: "$set", Value: bson.D{primitive.E{Key: "address.1.house_name", Value: newAddress.House}, primitive.E{Key: "address.1.street_name", Value: newAddress.Street}, primitive.E{Key: "address.1.city_name", Value: newAddress.City}, primitive.E{Key: "address.1.pin_code", Value: newAddress.Pincode}}}}
+		_, err = UserCollection.UpdateOne(context, filter, update)
+
+		if err != nil {
+			ctx.IndentedJSON(http.StatusInternalServerError, "Something Went Wrong")
+			return
+		}
+
+		ctx.IndentedJSON(http.StatusOK, "Successfully updated home address")
+
+	}
 
 }
 

@@ -105,7 +105,7 @@ func (app *Application) RemoveItem() gin.HandlerFunc {
 		context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		err := database.RemoveCartItem(context, app.productsCollection, app.usersCollection, productId, userQueryID)
+		err = database.RemoveCartItem(context, app.productsCollection, app.usersCollection, productId, userQueryID)
 
 		if err != nil {
 			ctx.IndentedJSON(http.StatusInternalServerError, err)
@@ -259,7 +259,7 @@ func (app *Application) InstantBuy() gin.HandlerFunc {
 		context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		err := database.InstantBuy(context, app.productsCollection, app.usersCollection, productId, userQueryID)
+		err = database.InstantBuy(context, app.productsCollection, app.usersCollection, productId, userQueryID)
 
 		if err != nil {
 			ctx.IndentedJSON(http.StatusInternalServerError, err)

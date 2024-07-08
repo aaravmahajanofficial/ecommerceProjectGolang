@@ -258,7 +258,7 @@ func DeleteAddress() gin.HandlerFunc {
 		context, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
 
-		// get this user from the document
+		// get this user from the documents
 		filter := bson.D{primitive.E{Key: "_id", Value: userId}}
 		updatedValue := bson.D{primitive.E{Key: "$set", Value: primitive.E{Key: "address", Value: addresses}}}
 

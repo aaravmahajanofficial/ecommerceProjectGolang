@@ -40,7 +40,7 @@ func VerifyPassword(userPassword string, givenPassword string) (bool, string) {
 	msg := ""
 
 	if err != nil {
-		msg = "Incorrect or Password is Incorrect"
+		msg = "Username or Password is Incorrect"
 		valid = false
 	}
 
@@ -60,9 +60,9 @@ func SignUp() gin.HandlerFunc {
 
 		// convert the incoming json in this type
 		if err := ctx.BindJSON(&user); err != nil {
-
+			log.Println(err)
 			// 400 Error
-			ctx.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			ctx.JSON(http.StatusBadRequest, gin.H{"Error": user})
 			return
 
 		}
@@ -146,6 +146,7 @@ func Login() gin.HandlerFunc {
 		// bind the JSON
 
 		if err := ctx.BindJSON(&user); err != nil {
+			log.Println(err)
 			ctx.JSON(http.StatusBadRequest, gin.H{"ERROR": err})
 			return
 		}
@@ -174,9 +175,9 @@ func Login() gin.HandlerFunc {
 
 }
 
-func ProductViewerAdmin() gin.HandlerFunc {
+// func ProductViewerAdmin() gin.HandlerFunc {
 
-}
+// }
 
 func SearchProduct() gin.HandlerFunc {
 

@@ -3,12 +3,10 @@ package tokens
 import (
 	"context"
 	"log"
-	"net/http"
 	"os"
 	"time"
 
 	"github.com/aaravmahajanofficial/ecommerce-project/database"
-	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

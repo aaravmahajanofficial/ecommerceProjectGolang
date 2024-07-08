@@ -8,7 +8,6 @@ import (
 	"github.com/aaravmahajanofficial/ecommerce-project/database"
 	"github.com/aaravmahajanofficial/ecommerce-project/middleware"
 	"github.com/aaravmahajanofficial/ecommerce-project/routes"
-
 	"github.com/gin-gonic/gin"
 )
 
